@@ -1,0 +1,35 @@
+{
+  "buildCommand": "echo 'Skipping build - static site'",
+  "installCommand": "echo 'No installation needed'",
+  "outputDirectory": "public",
+  "framework": "static",
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/consulta_lampadas.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/data/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, HEAD, PUT, PATCH, POST, DELETE"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type"
+        }
+      ]
+    }
+  ]
+}
