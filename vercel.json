@@ -3,7 +3,6 @@
   "installCommand": "",
   "outputDirectory": "public",
   "framework": "static",
-  "skipBuild": true,
   "rewrites": [
     {
       "source": "/",
