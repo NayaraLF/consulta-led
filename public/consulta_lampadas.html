@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Compatibilidade de Lâmpadas Automotivas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #012E40;
+            min-height: 100vh;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #012E40;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 2px solid #03738C;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #03738C 0%, #012E40 100%);
+            color: #ffffff;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            padding: 30px;
+            background: #03738C;
+            border-bottom: 2px solid #00BC99;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #ffffff;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 15px;
+            border: 2px solid #00BC99;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #00BC99;
+            box-shadow: 0 0 0 3px rgba(0, 188, 153, 0.3);
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .stats {
+            grid-column: 1 / -1;
+            padding: 15px;
+            background: rgba(0, 188, 153, 0.1);
+            border-radius: 6px;
+            font-size: 14px;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #00BC99;
+        }
+
+        .stats strong {
+            color: #00BC99;
+            font-weight: 600;
+        }
+
+        .results-section {
+            padding: 30px;
+            min-height: 200px;
+            background: #012E40;
+        }
+
+        .error-message {
+            background: rgba(220, 38, 38, 0.2);
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .no-results svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .no-results p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .no-results small {
+            display: block;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+        .car-group {
+            margin-bottom: 25px;
+            border: 2px solid #03738C;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #012E40;
+        }
+
+        .car-header {
+            background: #03738C;
+            padding: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #00BC99;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr auto;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .car-header .marca-modelo {
+            color: #ffffff;
+        }
+
+        .car-header .ano {
+            color: #00BC99;
+            font-size: 14px;
+        }
+
+        .car-header .fontes {
+            color: #b3d9d1;
+            font-size: 13px;
+        }
+
+        .car-header .badge {
+            background: #00BC99;
+            color: #012E40;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            width: 80px;
+        }
+
+        .car-header .badge.warning {
+            background: #FFD700;
+            color: #012E40;
+        }
+
+        .lampada-row {
+            padding: 15px;
+            border-top: 1px solid #03738C;
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+            font-size: 14px;
+            background: #012E40;
+        }
+
+        .lampada-row:first-child {
+            border-top: none;
+        }
+
+        .lampada-row .tipo {
+            font-weight: 600;
+            color: #00BC99;
+            padding: 6px 10px;
+            background: rgba(3, 115, 140, 0.3);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .lampada-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .lampada-item {
+            padding: 8px 10px;
+            background: rgba(3, 115, 140, 0.2);
+            border-radius: 4px;
+            border: 1px solid #03738C;
+            font-size: 13px;
+            position: relative;
+            color: #ffffff;
+        }
+
+        .lampada-item.source-label {
+            font-weight: 500;
+            color: #00BC99;
+            font-size: 12px;
+            background: rgba(0, 188, 153, 0.15);
+            border-color: #00BC99;
+        }
+
+        .lampada-item.empty {
+            color: #888;
+            font-style: italic;
+        }
+
+        .lampada-item.divergence {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            color: #FFD700;
+        }
+
+        .divergence-icon {
+            display: inline-block;
+            margin-right: 6px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .search-section {
+                grid-template-columns: 1fr;
+            }
+
+            .car-header {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .lampada-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .lampada-row .tipo {
+                margin-top: 10px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #00BC99;
+            font-size: 16px;
+        }
+
+        .loading::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+
+        footer {
+            background: #03738C;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #b3d9d1;
+            border-top: 2px solid #00BC99;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer code {
+            background: rgba(0, 188, 153, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #00BC99;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💡 Consulta de Compatibilidade de Lâmpadas</h1>
+            <p>Encontre as especificações corretas de lâmpadas automotivas para seu veículo</p>
+        </div>
+
+        <div class="search-section">
+            <div class="form-group">
+                <label for="searchInput">🔍 Busca Rápida</label>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Ex: Civic 2015, Ford, H4, Fiesta..."
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="brandFilter">🏢 Filtrar por Montadora</label>
+                <select id="brandFilter">
+                    <option value="">Todas as montadoras</option>
+                </select>
+            </div>
+
+            <div class="stats">
+                <span><strong id="resultCount">0</strong> resultados encontrados</span>
+                <span id="sourceInfo" style="font-size: 12px; color: #999;"></span>
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsContainer">
+            <div class="loading">Carregando dados</div>
+        </div>
+
+        <footer>
+            <p><strong>Como usar:</strong> Digite qualquer parte do que procura (marca, modelo, ano) para filtrar em tempo real.</p>
+            <p>💾 <strong>Se tiver erro de carregamento:</strong> Abra o terminal, navegue até esta pasta e execute:</p>
+            <p><code>python -m http.server 8000</code> e acesse <code>http://localhost:8000</code></p>
+            <p style="margin-top: 15px; color: #666;">Dados compilados de: Liderauto, Rayx e Permak</p>
+        </footer>
+    </div>
+
+    <script>
+        let allData = [];
+        let uniqueSources = new Set();
+
+        document.addEventListener('DOMContentLoaded', loadData);
+
+        async function loadData() {
+            try {
+                const response = await fetch('lampadas_data.json');
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                allData = await response.json();
+                uniqueSources = new Set(allData.map(d => d.fonte));
+
+                populateBrandFilter();
+                renderResults();
+
+                document.getElementById('searchInput').addEventListener('input', renderResults);
+                document.getElementById('brandFilter').addEventListener('change', renderResults);
+            } catch (error) {
+                document.getElementById('resultsContainer').innerHTML = `
+                    <div class="error-message">
+                        <strong>⚠️ Erro ao carregar dados:</strong><br>
+                        ${error.message}<br><br>
+                        <strong>Solução:</strong> Certifique-se de que <code>lampadas_data.json</code> está na mesma pasta deste arquivo.
+                        Se ainda não tiver gerado os dados, execute:<br>
+                        <code>python scraping_lampadas.py</code>
+                    </div>
+                `;
+            }
+        }
+
+        function populateBrandFilter() {
+            const brands = [...new Set(allData.map(d => d.marca))].sort();
+            const select = document.getElementById('brandFilter');
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                select.appendChild(option);
+            });
+        }
+
+        function yearInRange(anoTexto, searchYear) {
+            // Se a busca não é um número, retorna false
+            if (!/^\d+$/.test(searchYear)) return false;
+
+            const year = parseInt(searchYear);
+
+            // Se anoTexto vazio, retorna false
+            if (!anoTexto || anoTexto.trim() === '') return false;
+
+            // Se o ano_texto é "2000/2005", extrai os limites
+            if (anoTexto.includes('/')) {
+                try {
+                    const [inicio, fim] = anoTexto.split('/').map(s => {
+                        const num = parseInt(s.trim());
+                        return isNaN(num) ? 0 : num;
+                    });
+                    if (inicio === 0 || fim === 0) return false;
+                    return year >= inicio && year <= fim;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            // Se é apenas um ano, verifica igualdade
+            try {
+                return parseInt(anoTexto) === year;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function filterData() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase().trim();
+            const brand = document.getElementById('brandFilter').value;
+
+            // Separar termos de busca (pode ser "toro 2023" ou apenas "toro")
+            const searchTerms = searchInput.split(/\s+/).filter(t => t.length > 0);
+            const searchModelos = searchTerms.filter(t => !/^\d+$/.test(t));
+            const searchYears = searchTerms.filter(t => /^\d+$/.test(t)).map(y => parseInt(y));
+
+            let filtered = allData;
+
+            if (brand) {
+                filtered = filtered.filter(d => d.marca === brand);
+            }
+
+            if (searchInput.length > 0) {
+                filtered = filtered.filter(d => {
+                    const modelo = (d.modelo || '').toLowerCase();
+                    const marca = (d.marca || '').toLowerCase();
+                    const lampadas = `${d.farol_alto || ''} ${d.farol_baixo || ''} ${d.farol_milha || ''}`.toLowerCase();
+                    const ano = d.ano_texto || '';
+
+                    // Se há termos de modelo, verificar
+                    if (searchModelos.length > 0) {
+                        const modeloMatch = searchModelos.some(term =>
+                            modelo.includes(term) || marca.includes(term) || lampadas.includes(term)
+                        );
+                        if (!modeloMatch) return false;
+                    }
+
+                    // Se há anos, verificar
+                    if (searchYears.length > 0) {
+                        const anoMatch = searchYears.some(year => yearInRange(ano, String(year)));
+                        if (!anoMatch) return false;
+                    }
+
+                    return true;
+                });
+
+                // Ordenar resultados por relevância
+                filtered.sort((a, b) => {
+                    let scoreA = 0, scoreB = 0;
+
+                    // Pontuação por modelo
+                    searchModelos.forEach(term => {
+                        if (a.modelo.toLowerCase().includes(term)) scoreA += 10;
+                        if (b.modelo.toLowerCase().includes(term)) scoreB += 10;
+                        if (a.marca.toLowerCase().includes(term)) scoreA += 5;
+                        if (b.marca.toLowerCase().includes(term)) scoreB += 5;
+                    });
+
+                    // Pontuação por ano
+                    searchYears.forEach(year => {
+                        if (yearInRange(a.ano_texto, String(year))) scoreA += 8;
+                        if (yearInRange(b.ano_texto, String(year))) scoreB += 8;
+                    });
+
+                    return scoreB - scoreA;
+                });
+            }
+
+            return filtered;
+        }
+
+        function renderResults() {
+            const filtered = filterData();
+            const container = document.getElementById('resultsContainer');
+
+            document.getElementById('resultCount').textContent = filtered.length;
+            document.getElementById('sourceInfo').textContent = `em ${uniqueSources.size} fonte(s)`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <p>Nenhum resultado encontrado</p>
+                        <small>Tente alterar os filtros de busca</small>
+                    </div>
+                `;
+                return;
+            }
+
+            // Agrupar por marca + modelo + ano
+            const grouped = {};
+            filtered.forEach(item => {
+                const key = `${item.marca}|${item.modelo}|${item.ano_texto}`;
+                if (!grouped[key]) {
+                    grouped[key] = [];
+                }
+                grouped[key].push(item);
+            });
+
+            let html = '';
+            Object.entries(grouped).forEach(([key, items]) => {
+                const [marca, modelo, ano] = key.split('|');
+
+                // Detectar divergências
+                const lampadas = ['farol_alto', 'farol_baixo', 'farol_milha'];
+                const divergencias = {};
+
+                lampadas.forEach(tipo => {
+                    const valores = [...new Set(items.map(i => i[tipo]).filter(v => v))];
+                    divergencias[tipo] = valores.length > 1;
+                });
+
+                const temDivergencia = Object.values(divergencias).some(d => d);
+                const badge = temDivergencia ? 'warning' : '';
+                const badgeText = temDivergencia ? '⚠️ Divergências' : '✓ OK';
+
+                html += `
+                    <div class="car-group">
+                        <div class="car-header">
+                            <div class="marca-modelo">${marca} ${modelo}</div>
+                            <div class="ano">${ano}</div>
+                            <div class="fontes">${items.length} fonte(s)</div>
+                            <div class="badge ${badge}">${badgeText}</div>
+                        </div>
+                `;
+
+                const tiposLampada = [
+                    { chave: 'farol_alto', nome: 'Farol Alto' },
+                    { chave: 'farol_baixo', nome: 'Farol Baixo' },
+                    { chave: 'farol_milha', nome: 'Farol Milha' }
+                ];
+
+                tiposLampada.forEach(tipo => {
+                    const valor_chave = tipo.chave;
+                    html += `<div class="lampada-row">`;
+                    html += `<div class="tipo">${tipo.nome}</div>`;
+                    html += `<div class="lampada-info">`;
+
+                    const temDivergencia = divergencias[valor_chave];
+
+                    items.forEach(item => {
+                        const valor = item[valor_chave] || '';
+                        const classe = temDivergencia && valor ? 'divergence' : (valor ? '' : 'empty');
+                        const icon = temDivergencia && valor ? '⚠️ ' : '';
+
+                        html += `<div class="lampada-item ${classe}">
+                            <span class="source-label">${item.fonte}</span>
+                        </div>`;
+                        html += `<div class="lampada-item ${classe}">
+                            ${icon}${valor || '(sem informação)'}
+                        </div>`;
+                    });
+
+                    html += `</div></div>`;
+                });
+
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

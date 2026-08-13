@@ -1,0 +1,28 @@
+# Ambiente Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+server.log
+nohup.out
+
+# Arquivos temporários
+.DS_Store
+*.tmp
+debug_toro.html
+test_searches.html
