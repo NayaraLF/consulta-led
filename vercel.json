@@ -1,8 +1,9 @@
 {
-  "buildCommand": "echo 'Skipping build - static site'",
-  "installCommand": "echo 'No installation needed'",
+  "buildCommand": "",
+  "installCommand": "",
   "outputDirectory": "public",
   "framework": "static",
+  "skipBuild": true,
   "rewrites": [
     {
       "source": "/",

@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "consulta-led"
+version = "1.0.0"
+description = "Ferramenta de consulta de compatibilidade de lâmpadas automotivas"
+
+[tool.vercel]
+# Esta é uma aplicação estática, não Python
+# Ignora a detecção automática de Python
+framework = "static"
+# Desabilita qualquer busca por entrypoint Python
+skipBuild = true
