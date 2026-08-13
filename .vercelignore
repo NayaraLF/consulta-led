@@ -1,7 +1,9 @@
-src/
+src/**
+**/*.py
 requirements.txt
 *.pyc
 __pycache__/
 .git/
 .gitignore
 README.md
+pyproject.toml
