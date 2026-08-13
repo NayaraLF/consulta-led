@@ -1,0 +1,2 @@
+Força redeploy no Vercel
+Timestamp: 2026-08-13 14:52:00
