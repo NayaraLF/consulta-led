@@ -1,0 +1,12 @@
+{
+  "name": "consulta-led",
+  "version": "1.0.0",
+  "description": "Ferramenta de consulta de compatibilidade de lâmpadas automotivas",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": ["automotive", "lamps", "compatibility"],
+  "author": "Nayara",
+  "license": "MIT"
+}
