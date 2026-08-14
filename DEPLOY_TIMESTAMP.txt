@@ -1,2 +1,0 @@
-Deployment attempt: 2026-08-13 15:59:00
-Latest commit includes api/index.py entrypoint

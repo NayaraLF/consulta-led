@@ -1,6 +1,2 @@
-.dev/
 .git/
-.gitignore
 README.md
-BUILD_TRIGGER.txt
-DEPLOY_TIMESTAMP.txt

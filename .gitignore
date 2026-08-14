@@ -1,14 +1,10 @@
-# Ambiente Python
+# Dependencies
+node_modules/
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
+*.pyc
+*.pyo
+.venv/
 venv/
-*.egg-info/
-dist/
-build/
 
 # IDE
 .vscode/
@@ -16,13 +12,12 @@ build/
 *.swp
 *.swo
 
-# Logs
-*.log
-server.log
-nohup.out
-
-# Arquivos temporários
+# OS
 .DS_Store
-*.tmp
-debug_toro.html
-test_searches.html
+.env
+.env.local
+
+# Build
+.vercel/
+dist/
+build/
