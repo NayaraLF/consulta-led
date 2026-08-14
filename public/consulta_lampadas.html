@@ -384,7 +384,7 @@
 
         async function loadData() {
             try {
-                const response = await fetch('lampadas_data.json');
+                const response = await fetch('../data/lampadas_data.json');
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 allData = await response.json();
