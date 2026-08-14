@@ -1,6 +1,6 @@
 {
-  "buildCommand": "echo 'Static site - no build needed'",
-  "outputDirectory": ".",
+  "outputDirectory": "public",
+  "public": true,
   "headers": [
     {
       "source": "/data/(.*)",
@@ -14,21 +14,13 @@
           "value": "public, max-age=3600"
         }
       ]
-    },
-    {
-      "source": "/public/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=86400"
-        }
-      ]
     }
   ],
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/",
-      "destination": "/public/consulta_lampadas.html"
+      "source": "/data/(.*)",
+      "destination": "/data/$1",
+      "permanent": true
     }
   ]
 }
